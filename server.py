@@ -1,19 +1,17 @@
-"""
-Servidor Flask para detección de emociones.
-"""
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    """Página principal con formulario HTML"""
+    return render_template("index.html")
+
 @app.route("/emotionDetector")
 def detectar_emocion():
-    """
-    Endpoint que recibe texto y devuelve la emoción dominante.
-    Maneja errores cuando la entrada es inválida.
-    """
-    frase = request.args.get("text")
+    """Endpoint que recibe texto y devuelve emociones"""
+    frase = request.args.get("textToAnalyze")
     result = emotion_detector(frase)
 
     if result["dominant_emotion"] is None:
